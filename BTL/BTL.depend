@@ -1,0 +1,166 @@
+# depslib dependency file v1.0
+1652262568 source:e:\btl\bigbang.cpp
+	"BigBang.h"
+
+1652262894 e:\btl\bigbang.h
+	"LTexture.h"
+
+1652263132 e:\btl\ltexture.h
+	<string>
+	<SDL.h>
+	<SDL_ttf.h>
+	"Constant.h"
+
+1652263013 e:\btl\constant.h
+
+1652262598 source:e:\btl\checkcollision.cpp
+	"CheckCollision.h"
+
+1652262911 e:\btl\checkcollision.h
+	<SDL.h>
+
+1652262631 source:e:\btl\compare.cpp
+	<iostream>
+	<SDL.h>
+
+1652262852 source:e:\btl\enemybullet.cpp
+	"EnemyBullet.h"
+
+1652268705 e:\btl\enemybullet.h
+	"Object.h"
+
+1652263183 e:\btl\object.h
+	"LTexture.h"
+
+1652262856 source:e:\btl\enemyplane.cpp
+	<sstream>
+	"EnemyPlane.h"
+
+1652268718 e:\btl\enemyplane.h
+	<vector>
+	"EnemyBullet.h"
+	"Object.h"
+	"BigBang.h"
+
+1652262859 source:e:\btl\enemyplane2.cpp
+	<sstream>
+	"EnemyPlane2.h"
+
+1652268705 e:\btl\enemyplane2.h
+	<vector>
+	"EnemyBullet.h"
+	"Object.h"
+
+1652262491 source:e:\btl\hp.cpp
+	"HP.h"
+
+1652268705 e:\btl\hp.h
+	"Object.h"
+
+1652269461 source:e:\btl\init.cpp
+	<iostream>
+	"init.h"
+
+1652262832 source:e:\btl\ltexture.cpp
+	<iostream>
+	"LTexture.h"
+	<SDL_image.h>
+
+1652262827 source:e:\btl\mybullet.cpp
+	"MyBullet.h"
+
+1652263148 e:\btl\mybullet.h
+	"Object.h"
+
+1652262830 source:e:\btl\myplane.cpp
+	"MyPlane.h"
+
+1652268705 e:\btl\myplane.h
+	<iostream>
+	<stdio.h>
+	<vector>
+	<sstream>
+	"Object.h"
+	"MyBullet.h"
+	"BigBang.h"
+
+1652262340 source:e:\btl\object.cpp
+	"Object.h"
+
+1652263715 e:\btl\init.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+
+1652278736 source:e:\btl\main.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<string>
+	<vector>
+	<cstdlib>
+	"init.h"
+	"close.h"
+	"LTexture.h"
+	"Menu.h"
+	"Constant.h"
+	"Play.h"
+
+1652262948 e:\btl\compare.h
+
+1652269582 e:\btl\play.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<string>
+	<vector>
+	<cstdlib>
+	"Constant.h"
+	"init.h"
+	"LTexture.h"
+	"Object.h"
+	"MyBullet.h"
+	"MyPlane.h"
+	"EnemyBullet.h"
+	"EnemyPlane.h"
+	"EnemyPlane2.h"
+	"HP.h"
+	"BigBang.h"
+	"Compare.h"
+	"CheckCollision.h"
+
+1652269582 source:e:\btl\play.cpp
+	<iostream>
+	"Play.h"
+
+1652274523 e:\btl\value.h
+	"LTexture.h"
+
+1652269290 source:e:\btl\close.cpp
+	<iostream>
+	"init.h"
+
+1652269332 e:\btl\close.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+
+1652279135 e:\btl\menu.h
+	"LTexture.h"
+	"init.h"
+	"close.h"
+	"Play.h"
+
+1652278677 source:e:\btl\menu.cpp
+	<iostream>
+	"Menu.h"
+
+1652278759 source:e:\btl\home.cpp
+	<iostream>
+	"Menu.h"
+
