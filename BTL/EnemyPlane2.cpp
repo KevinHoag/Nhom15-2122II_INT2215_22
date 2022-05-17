@@ -1,19 +1,20 @@
 #include <sstream>
+#include <iostream>
 #include "EnemyPlane2.h"
 
-Enemy2::Enemy2(SDL_Renderer *&gRenderer, int x_, int y_)
+Enemy2::Enemy2(SDL_Renderer *&gRenderer, int x_, int y_, int diff)
 {
     hp = 50;
     alive = true;
-    img.loadfromfile(gRenderer, "EnemyPlane22.png");
-    w = img.getWidth();
-    h = img.getHeight();
+  //  img.loadfromfile(gRenderer, "EnemyPlane22.png");
+    w = Plane2_w;
+    h = Plane2_h;
     x = x_;
     y = -h;
-    vx = 1;
+    vx = 1 + diff / 50000;
     dem = 0;
 
-    pos.resize(3);
+    pos.resize(4);
 
     pos[0].x = 0;
     pos[0].y = 0;
@@ -30,20 +31,27 @@ Enemy2::Enemy2(SDL_Renderer *&gRenderer, int x_, int y_)
     pos[2].w = w * 7 / 17;
     pos[2].h = h * 2 / 9;
 
+    pos[3].x = 0;
+    pos[3].y = 0;
+    pos[3].w = w * 2 / 3;
+    pos[3].h = h * 4 / 25;
+
     shift();
 }
 
-bool Enemy2::move1(SDL_Renderer *&gRenderer)
+bool Enemy2::move1(SDL_Renderer *&gRenderer, int diff)
 {
     if (alive == false && bullet.size() == 0) return false;
     if (alive == true)
     {
         dem++;
-        if (dem == 200)
+        int tam = 200 - (diff / 30000) * 50;
+        if (tam < 50) tam = 50;
+        if (dem >= tam)
         {
-            EnemyBullet tam1(gRenderer, x + (w - Bullet_w) / 4, y + h - Bullet_h / 2);
+            EnemyBullet tam1(gRenderer, x + (w - Bullet_w) / 4, y + h - Bullet_h / 2, diff);
             bullet.push_back(tam1);
-            EnemyBullet tam2(gRenderer, x + (w - Bullet_w) * 3 / 4, y + h - Bullet_h / 2);
+            EnemyBullet tam2(gRenderer, x + (w - Bullet_w) * 3 / 4, y + h - Bullet_h / 2, diff);
             bullet.push_back(tam2);
             dem = 0;
         }
@@ -58,30 +66,29 @@ bool Enemy2::move1(SDL_Renderer *&gRenderer)
 
     if (alive == true)
     {
-        if (y < status.getHeight()) y += 1;
+        if (y < status.getHeight()) y += 2;
         else
         {
-            SDL_Rect tam1 = {x, y, w, h};
             if (x + w > Width || x < 0) vx = -vx;
-            x += vx;
+                x += vx;
         }
         shift();
     }
     return true;
 }
 
-void Enemy2::render(SDL_Renderer *&gRenderer, TTF_Font *&gFont)
+void Enemy2::render(SDL_Renderer *&gRenderer, TTF_Font *&gFont, LTexture EPlane2 ,LTexture &Bullet)
 {
     if (alive == true)
     {
         if (y < 0)
         {
             SDL_Rect tam = {0, abs(y), w, h + y};
-            img.render(gRenderer, x, 0, &tam);
+            EPlane2.render(gRenderer, x, 0, &tam);
         }
         else
         {
-            Object::render(gRenderer);
+            EPlane2.render(gRenderer, x, y);
         }
         stringstream ss;
         ss.str("");
@@ -90,7 +97,7 @@ void Enemy2::render(SDL_Renderer *&gRenderer, TTF_Font *&gFont)
         status.render(gRenderer, x + (w - status.getWidth()) / 2, y - status.getHeight());
     }
     for (int i = 0; i < bullet.size(); i++)
-        bullet[i].render(gRenderer);
+        bullet[i].render(gRenderer, Bullet);
 }
 
 vector <SDL_Rect> Enemy2::getRect()
@@ -107,9 +114,18 @@ void Enemy2::shift()
         pos[i].y = y + h * 4 / 9;
         r += pos[i].w;
     }
+    pos[3].x = x + (w - pos[3].w) / 2;
+    pos[3].y = y;
 }
 
 bool Enemy2::alive1()
 {
     return alive;
 }
+
+void Enemy2::close()
+{
+    bullet.clear();
+    status.close();
+}
+

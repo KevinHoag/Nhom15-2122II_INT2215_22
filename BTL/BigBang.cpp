@@ -5,9 +5,9 @@ BigBang::BigBang(SDL_Renderer *&gRenderer, int x_, int y_)
     x = x_;
     y = y_;
     frame = 0;
-    clip.loadfromfile(gRenderer, "Explosion3.png");
-    w = clip.getWidth() / 4;
-    h = clip.getHeight() / 4;
+  //  clip.loadfromfile(gRenderer, "Explosion3.png");
+    w = Explosion_w / 4;
+    h = Explosion_h / 4;
     int wi = 128;
     int hi = 128;
     int yi = 0;
@@ -25,10 +25,10 @@ BigBang::BigBang(SDL_Renderer *&gRenderer, int x_, int y_)
     }
 }
 
-bool BigBang::render(SDL_Renderer *&gRenderer)
+bool BigBang::render(SDL_Renderer *&gRenderer, LTexture &BB)
 {
     if (frame > 15) return false;
-    clip.render(gRenderer, x - w / 4, y - h / 4, &Explo[frame]);
+    BB.render(gRenderer, x - w / 4, y - h / 4, &Explo[frame]);
     frame++;
     return true;
 }

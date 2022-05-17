@@ -6,13 +6,13 @@
 class EnemyBullet: public Object
 {
     SDL_Rect a;
+    int td;
 public:
-    EnemyBullet(SDL_Renderer *&gRenderer, int x_ = 0, int y_ = 0);
+    EnemyBullet(SDL_Renderer *&gRenderer, int x_ = 0, int y_ = 0, int diff = 0);
     bool move1();
-    void render(SDL_Renderer *&gRenderer);
     SDL_Rect &getRect();
     void shift();
-    friend void update(SDL_Renderer *&gRenderer);
+    friend void update();
 };
 
 #endif

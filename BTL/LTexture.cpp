@@ -61,7 +61,8 @@ int LTexture::getWidth()
 
 void LTexture::close()
 {
+    SDL_DestroyTexture(mTexture);
+    mTexture = NULL;
     w = 0;
     h = 0;
-    mTexture = NULL;
 }

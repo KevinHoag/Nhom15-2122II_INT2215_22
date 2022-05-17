@@ -1,16 +1,19 @@
 #include <sstream>
 #include "EnemyPlane.h"
 
-Enemy::Enemy(SDL_Renderer *&gRenderer, int x_, int y_)
+Enemy::Enemy(SDL_Renderer *&gRenderer, int x_, int y_, int diff)
 {
     hp = 30;
-    img.loadfromfile(gRenderer, "EnemyPlane4.png");
+   // img.loadfromfile(gRenderer, "EnemyPlane4.png");
     alive = true;
-    w = img.getWidth();
-    h = img.getHeight();
+    w = Plane_w;
+    h = Plane_h;
     x = x_;
     y = -h;
-    vx = rand() % 2;
+    vx = 1 + diff / 50000;
+    int tam2 = rand() % 3;
+    if (tam2 == 0) vx = -vx;
+    else if (tam2 == 1) vx = 0;
 
     pos.resize(6);
 
@@ -47,7 +50,7 @@ Enemy::Enemy(SDL_Renderer *&gRenderer, int x_, int y_)
     shift();
 }
 
-bool Enemy::move1(SDL_Renderer *&gRenderer)
+bool Enemy::move1(SDL_Renderer *&gRenderer, int diff)
 {
     if (y > Height) return false;
     if (alive == false && bullet.size() == 0) return false;
@@ -55,7 +58,7 @@ bool Enemy::move1(SDL_Renderer *&gRenderer)
     {
         if (y % 200 == 0)
         {
-            EnemyBullet tam(gRenderer, x + (w - Bullet_w) / 2, y + h - Bullet_h / 2);
+            EnemyBullet tam(gRenderer, x + (w - Bullet_w) / 2, y + h - Bullet_h / 2, diff);
             bullet.push_back(tam);
         }
     }
@@ -65,26 +68,28 @@ bool Enemy::move1(SDL_Renderer *&gRenderer)
         if (bullet[i].move1() == false) bullet.erase(bullet.begin() + i);
         else i++;
     }
-    if (x + w > Width || x < 0) vx = -vx;
-    y += 1;
-    x += vx;
-    shift();
-
+    if (alive == true)
+    {
+        if (x + w > Width || x < 0) vx = -vx;
+        y += 1;
+        x += vx;
+        shift();
+    }
     return true;
 }
 
-void Enemy::render(SDL_Renderer *&gRenderer, TTF_Font *&gFont)
+void Enemy::render(SDL_Renderer *&gRenderer, TTF_Font *&gFont, LTexture &EPlane, LTexture &Bullet)
 {
     if (alive == true)
     {
         if (y <= 0)
         {
             SDL_Rect tam = {0, abs(y), w, h + y};
-            img.render(gRenderer, x, 0, &tam);
+            EPlane.render(gRenderer, x, 0, &tam);
         }
         else
         {
-            Object::render(gRenderer);
+            EPlane.render(gRenderer, x, y);
         }
         stringstream ss;
         ss.str("");
@@ -93,7 +98,7 @@ void Enemy::render(SDL_Renderer *&gRenderer, TTF_Font *&gFont)
         status.render(gRenderer, x + (w - status.getWidth()) / 2, y - status.getHeight());
     }
     for (int i = 0; i < bullet.size(); i++)
-        bullet[i].render(gRenderer);
+        bullet[i].render(gRenderer, Bullet);
 }
 
 vector <SDL_Rect> Enemy::getRect()
@@ -118,3 +123,10 @@ bool Enemy::alive1()
 {
     return alive;
 }
+
+void Enemy::close()
+{
+    bullet.clear();
+    status.close();
+}
+

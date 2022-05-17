@@ -63,7 +63,7 @@ void MyPlane::handle(SDL_Renderer *&gRenderer, SDL_Event &e)
         case SDLK_RIGHT:
             vx += vt;
             break;
-        case SDLK_RETURN:
+        case SDLK_SPACE:
             MyBullet tam(gRenderer, x + (w - Bullet_w) / 2, y);
             bullet.push_back(tam);
             break;
@@ -91,7 +91,6 @@ void MyPlane::handle(SDL_Renderer *&gRenderer, SDL_Event &e)
 
 void MyPlane::move1()
 {
-    for (int i = 0; i < bullet.size(); i++) bullet[i].move1();
     if (alive == true)
     {
         x += vx;
@@ -100,26 +99,29 @@ void MyPlane::move1()
         if (y < 0 || y + h > Height) y -= vy;
         shift();
     }
+    int i = 0;
+    while (i < bullet.size())
+    {
+        if (bullet[i].move1() == false) bullet.erase(bullet.begin() + i);
+        else i++;
+    }
 }
 
-void MyPlane::render(SDL_Renderer *&gRenderer, TTF_Font *&gFont)
+
+void MyPlane::render(SDL_Renderer *&gRenderer, TTF_Font *&gFont, LTexture &Bullet)
 {
     if (alive == true)
     {
-        Object::render(gRenderer);
+        img.render(gRenderer, x, y);
         stringstream ss;
         ss.str("");
         ss << " HP:" << hp;
         status.loadfromrenderedtext(gRenderer, gFont, ss.str().c_str(), Color);
         status.render(gRenderer, x + (w - status.getWidth()) / 2, y + h);
     }
-    int i = 0;
-    while (i < bullet.size())
-    {
-        if (bullet[i].render(gRenderer) == false) bullet.erase(bullet.begin() + i);
-        else i++;
-    }
+    for (int i = 0; i < bullet.size(); i++) bullet[i].render(gRenderer, Bullet);
 }
+
 
 void MyPlane::shift()
 {
@@ -131,7 +133,7 @@ void MyPlane::shift()
         r += pos[i].w;
     }
     pos[5].x = x + (w - pos[5].w) / 2;
-    pos[5].y = y + (h - (h - pos[5].h));
+    pos[5].y = y + (h - pos[5].h);
 }
 
 vector <SDL_Rect> MyPlane::getRect()
@@ -139,7 +141,20 @@ vector <SDL_Rect> MyPlane::getRect()
     return pos;
 }
 
+SDL_Rect MyPlane::getPos()
+{
+    SDL_Rect tam = {x, y, w, h};
+    return tam;
+}
+
 bool MyPlane::alive1()
 {
     return alive;
+}
+
+void MyPlane::close()
+{
+    bullet.clear();
+    img.close();
+    status.close();
 }

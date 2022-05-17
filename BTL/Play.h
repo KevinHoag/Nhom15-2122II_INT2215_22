@@ -24,10 +24,12 @@
 #include "Compare.h"
 #include "CheckCollision.h"
 
-void sinh(SDL_Renderer *&gRenderer);
+
+void sinh(SDL_Renderer *&gRenderer, int sl1, int sl2);
 void update(SDL_Renderer *&gRenderer);
 void Exp(SDL_Renderer *&gRenderer);
-void loadmedia(SDL_Renderer *&gRenderer, TTF_Font *&gFont);
-void xuly(SDL_Window *&gWindow, SDL_Renderer *&gRenderer, TTF_Font *&gFont);
+void loadmedia(SDL_Renderer *&gRenderer, TTF_Font *&gFont, TTF_Font *&pFont);
+void loadbg(int &check_background, SDL_Renderer *&gRenderer);
+void xuly(int &check_background, SDL_Window *&gWindow, SDL_Renderer *&gRenderer, TTF_Font *&gFont, TTF_Font *&pFont);
 
 #endif

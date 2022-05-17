@@ -1,23 +1,48 @@
 #include <iostream>
+#include <algorithm>
+#include <fstream>
 
 #include "Play.h"
+#include "Menu.h"
 
 // Global variable
 
-LTexture BG;
+LTexture BG1;
+LTexture Fl;
+LTexture Bullet;
+LTexture EPlane;
+LTexture EPlane2;
+LTexture BB;
+LTexture hp;
+LTexture Point;
+LTexture Time;
+LTexture PressP;
+LTexture PressB;
+LTexture Die;
+LTexture Result;
+LTexture PlayAgain;
+
+SDL_Rect background;
 MyPlane Plane;
 vector <HP> HPBox;
 vector <Enemy> EnemyPlane;
 vector <Enemy2> EnemyPlane2;
 vector <BigBang> Explosions;
 Uint32 timing = 0;
+int score;
+bool paused;
+Uint32 countTime = 0;
+Uint32 startTime = 0;
+Uint32 realTime = 0;
+Uint32 pauseTime = 0;
+Uint32 continueTime = 0;
 
 
 //Random EnemyPlane
-void sinh(SDL_Renderer *&gRenderer)
+void sinh(SDL_Renderer *&gRenderer, int sl1, int sl2)
 {
     int x1 = min1 + rand() % (max1 - min1);
-    if (x1 == 5 && EnemyPlane.size() < 3)
+    if (x1 == 5 && EnemyPlane.size() < min(sl1, 5))
     {
         int y = 0;
         while (true)
@@ -40,7 +65,8 @@ void sinh(SDL_Renderer *&gRenderer)
                 {
                     int a = EnemyPlane2[i].x;
                     int b = Plane2_w;
-                    if (y >= a - b && y <= a + b)
+                    int c = Plane_w;
+                    if (y >= a - c && y <= a + b)
                     {
                         ok = false;
                         break;
@@ -48,12 +74,12 @@ void sinh(SDL_Renderer *&gRenderer)
                 }
             if (ok == true) break;
         }
-        Enemy tam(gRenderer, y, 0);
+        Enemy tam(gRenderer, y, 0, realTime);
         EnemyPlane.push_back(tam);
     }
 
     int x2 = min1 + rand() % (max1 - min1);
-    if (x2 == 10 && EnemyPlane2.size() < 1)
+    if (x2 == 10 && EnemyPlane2.size() < min(sl2, 3))
     {
         int y = 0;
         while (true)
@@ -65,7 +91,8 @@ void sinh(SDL_Renderer *&gRenderer)
                 {
                     int a = EnemyPlane[i].x;
                     int b = Plane_w;
-                    if (y >= a - b && y <= a + b)
+                    int c = Plane2_w;
+                    if (y >= a - c && y <= a + b)
                     {
                         ok = false;
                         break;
@@ -84,7 +111,7 @@ void sinh(SDL_Renderer *&gRenderer)
                 }
             if (ok == true) break;
         }
-        Enemy2 tam(gRenderer, y, 0);
+        Enemy2 tam(gRenderer, y, 0, realTime);
         EnemyPlane2.push_back(tam);
     }
 }
@@ -155,11 +182,13 @@ void update(SDL_Renderer *&gRenderer)
     for (int i = 0; i < EnemyPlane2.size(); i++)
         if (EnemyPlane2[i].alive1() == true)
         {
-            SDL_Rect tam2 = {EnemyPlane2[i].x, EnemyPlane2[i].y, EnemyPlane2[i].w, EnemyPlane2[i].h};
+ //           SDL_Rect tam2 = {EnemyPlane2[i].x, EnemyPlane2[i].y, EnemyPlane2[i].w, EnemyPlane2[i].h};
+            SDL_Rect tam2 = {EnemyPlane2[i].x, EnemyPlane2[i].y - EnemyPlane2[i].status.getHeight(), EnemyPlane2[i].w, EnemyPlane2[i].h + EnemyPlane2[i].status.getHeight()};
             for (int j = i + 1; j < EnemyPlane2.size(); j++)
                 if (EnemyPlane2[j].alive1() == true)
                 {
-                    SDL_Rect tam3 = {EnemyPlane2[j].x, EnemyPlane2[j].y, EnemyPlane2[j].w, EnemyPlane2[j].h};
+//                    SDL_Rect tam3 = {EnemyPlane2[j].x, EnemyPlane2[j].y, EnemyPlane2[j].w, EnemyPlane2[j].h};
+                    SDL_Rect tam3 = {EnemyPlane2[j].x, EnemyPlane2[j].y - EnemyPlane2[j].status.getHeight(), EnemyPlane2[j].w, EnemyPlane2[j].h + EnemyPlane2[j].status.getHeight()};
                     if (CheckCollision(tam2, tam3) == true)
                     {
                         EnemyPlane2[i].vx = -EnemyPlane2[i].vx;
@@ -175,7 +204,7 @@ void update(SDL_Renderer *&gRenderer)
             for (int j = 0; j < EnemyPlane2.size(); j++)
                 if (EnemyPlane2[j].alive1() == true)
                 {
-                    SDL_Rect tam3 = {EnemyPlane2[j].x, EnemyPlane2[j].y, EnemyPlane2[j].w, EnemyPlane2[j].h};
+                    SDL_Rect tam3 = {EnemyPlane2[j].x, EnemyPlane2[j].y - EnemyPlane2[j].status.getHeight(), EnemyPlane2[j].w, EnemyPlane2[j].h + EnemyPlane2[j].status.getHeight()};
                     if (CheckCollision(tam2, tam3) == true)
                     {
                         EnemyPlane[i].vx = -EnemyPlane[i].vx;
@@ -187,6 +216,7 @@ void update(SDL_Renderer *&gRenderer)
     //Dan va cham may bay dich
 
     int i = 0;
+
     while (i < Plane.bullet.size())
     {
         SDL_Rect tam2 = Plane.bullet[i].getRect();
@@ -299,6 +329,7 @@ void update(SDL_Renderer *&gRenderer)
             if (EnemyPlane[j].hp <= 0)
             {
                 EnemyPlane[j].alive = false;
+                score += 30;
                 BigBang k(gRenderer, EnemyPlane[j].x, EnemyPlane[j].y);
                 Explosions.push_back(k);
                 int t1 = rand() % 15;
@@ -315,6 +346,7 @@ void update(SDL_Renderer *&gRenderer)
             if (EnemyPlane2[j].hp <= 0)
             {
                 EnemyPlane2[j].alive = false;
+                score += 50;
                 BigBang k(gRenderer, EnemyPlane2[j].x, EnemyPlane2[j].y);
                 Explosions.push_back(k);
                 int t1 = rand() % 15;
@@ -334,26 +366,118 @@ void Exp(SDL_Renderer *&gRenderer)
     int i = 0;
     while (i < Explosions.size())
     {
-        if (Explosions[i].render(gRenderer) == false) Explosions.erase(Explosions.begin() + i);
+        if (Explosions[i].render(gRenderer, BB) == false) Explosions.erase(Explosions.begin() + i);
         else i++;
     }
 }
 
-//Loadmedia
-void loadmedia(SDL_Renderer *&gRenderer, TTF_Font *&gFont)
+
+//reset
+void reset()
 {
-    gFont = TTF_OpenFont("VAPTIMN.TTF", 13);
-    BG.loadfromfile(gRenderer, "Jungle.png");
-    Plane.loadfromfile(gRenderer, "MyPlane4.png");
+    paused = false;
+    score = 0;
+    startTime = SDL_GetTicks();
+    realTime = 0;
+    pauseTime = 0;
+    countTime = 0;
+    continueTime = 0;
+    background = {0, Level_Height - Height, Width, Height};
+    Plane.x = (Width - Plane.w) / 2;
+    Plane.y = Height - Plane.h;
+    Plane.vx = 0;
+    Plane.vy = 0;
+    Plane.hp = 100;
+    Plane.alive = true;
+    Plane.bullet.clear();
+    for (int i = 0; i < EnemyPlane.size(); i++)
+    {
+        EnemyPlane[i].close();
+    }
+    for (int i = 0; i < EnemyPlane2.size(); i++)
+    {
+        EnemyPlane2[i].close();
+    }
+    EnemyPlane.clear();
+    EnemyPlane2.clear();
+    HPBox.clear();
+    Explosions.clear();
+    Plane.status.close();
 }
 
-void xuly(SDL_Window *&gWindow, SDL_Renderer *&gRenderer, TTF_Font *&gFont)
+void close()
 {
+    BG1.close();
+    Fl.close();
+    Bullet.close();
+    EPlane.close();
+    EPlane2.close();
+    BB.close();
+    hp.close();
+    Point.close();
+    Time.close();
+    PressB.close();
+    PressP.close();
+    Plane.close();
+    for (int i = 0; i < EnemyPlane.size(); i++)
+    {
+        EnemyPlane[i].close();
+    }
+    for (int i = 0; i < EnemyPlane2.size(); i++)
+    {
+        EnemyPlane2[i].close();
+    }
+    EnemyPlane.clear();
+    EnemyPlane2.clear();
+    HPBox.clear();
+    Explosions.clear();
+}
 
-    loadmedia(gRenderer, gFont);
+//Loadmedia
+void loadmedia(SDL_Renderer *&gRenderer, TTF_Font *&gFont, TTF_Font *&pFont)
+{
+    gFont = TTF_OpenFont("VAPTIMN.TTF", 13);
+    pFont = TTF_OpenFont("VAVOBI.TTF", 20);
+    Fl.loadfromfile(gRenderer, "FinishLine3.png");
+    Plane.loadfromfile(gRenderer, "MyPlane4.png");
+    Bullet.loadfromfile(gRenderer, "Bullet3.png");
+    EPlane.loadfromfile(gRenderer, "EnemyPlane4.png");
+    EPlane2.loadfromfile(gRenderer, "EnemyPlane22.png");
+    BB.loadfromfile(gRenderer, "Explosion3.png");
+    hp.loadfromfile(gRenderer, "HP3.png");
+    PressP.loadfromrenderedtext(gRenderer, pFont, "Press P to Continue", Color);
+    PressB.loadfromrenderedtext(gRenderer, pFont, "Press B to Back to Menu", Color);
+    Die.loadfromrenderedtext(gRenderer, pFont, "You died!", Color);
+    PlayAgain.loadfromrenderedtext(gRenderer, pFont, "Press Enter to Play again", Color);
+}
+
+void loadbg(int &check_background, SDL_Renderer *&gRenderer)
+{
+    if (check_background == 1) BG1.loadfromfile(gRenderer, "Jungle.png");
+    if (check_background == 2) BG1.loadfromfile(gRenderer, "HaNoi2.png");
+    if (check_background == 3) BG1.loadfromfile(gRenderer, "Jungle.png");
+}
+
+bool dk(pair<int, int> a, pair<int, int> b)
+{
+    if (a.first == b.first)
+    {
+        if (a.second > b.second) return false;
+        return true;
+    }
+    if (a.first < b.first) return false;
+    return true;
+}
+
+void xuly(int &check_background, SDL_Window *&gWindow, SDL_Renderer *&gRenderer, TTF_Font *&gFont, TTF_Font *&pFont)
+{
+    reset();
+    loadmedia(gRenderer, gFont, pFont);
+    loadbg(check_background, gRenderer);
     bool quit = false;
+    bool fn = false;
     SDL_Event e;
-    SDL_Rect background = {0, Level_Height - Height, Width, Height};
+    background = {0, Level_Height - Height, Width, Height};
     SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
     SDL_RenderClear(gRenderer);
 
@@ -362,46 +486,181 @@ void xuly(SDL_Window *&gWindow, SDL_Renderer *&gRenderer, TTF_Font *&gFont)
         Uint32 tam1 = SDL_GetTicks();
         while (SDL_PollEvent(&e) != 0)
         {
-            if (e.type == SDL_QUIT) quit = true;
-            if (Plane.alive1() == true) Plane.handle(gRenderer, e);
+            if (e.type == SDL_QUIT)
+            {
+                close();
+                quit = true;
+            }
+            if (Plane.alive1() == false)
+            {
+                if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN) reset();
+                if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_b)
+                {
+                    close();
+                    quit = true;
+                }
+            }
+            else
+            {
+                if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_b && paused == true)
+                    {
+                        close();
+                        quit = true;
+                    }
+                else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_p)
+                {
+                    if (paused == true)
+                    {
+                        continueTime = SDL_GetTicks();
+                        paused = false;
+                    }
+                    else
+                    {
+                        pauseTime = countTime;
+                        paused = true;
+                    }
+                }
+                else if (Plane.alive1() == true && paused == false) Plane.handle(gRenderer, e);
+            }
         }
 
-        BG.render(gRenderer, 0, 0, &background);
+        if (background.y < 0)
+        {
+            SDL_Rect background2 = {0, Fl.getHeight() + background.y, Width, abs(background.y)};
+            SDL_Rect background3 = {0, 0, Width, Height - abs(background.y)};
+            Fl.render(gRenderer, 0, 0, &background2);
+       //     BG2.render(gRenderer, 0, abs(background.y), &background3);
+            BG1.render(gRenderer, 0, abs(background.y), &background3);
+            SDL_Rect tam1 = {0, 0, Width, abs(background.y)};
+            SDL_Rect tam2 = Plane.getPos();
+            if (fn == false && CheckCollision(tam1, tam2) == true)
+            {
+                score += 100;
+                fn = true;
+            }
+        }
+        else
+        {
+            if (background.y <= Level_Height - Height)
+            {
+                fn = false;
+                BG1.render(gRenderer, 0, 0, &background);
+            }
+            else
+            {
+                int tam = Level_Height - background.y;
+                SDL_Rect background2 = {0, background.y, Width, tam};
+                SDL_Rect background3 = {0, 0, Width, Fl.getHeight()};
+                SDL_Rect background4 = {0, 0, Width, Height - tam - Fl.getHeight()};
+                BG1.render(gRenderer, 0, 0, &background2);
+                Fl.render(gRenderer, 0, tam, &background3);
+                BG1.render(gRenderer, 0, tam + Fl.getHeight(), &background4);
+                SDL_Rect tam1 = {0, tam, Width, Fl.getHeight()};
+                SDL_Rect tam2 = Plane.getPos();
+                if (fn == false && CheckCollision(tam1, tam2) == true)
+                {
+                    score += 100;
+                    fn = true;
+                }
+            }
+        }
         if (Plane.alive1() == true)
         {
-            background.y -= 1;
-            if (background.y < 0) background.y = Level_Height - Height;
-
-            update(gRenderer);
-            sinh(gRenderer);
-
-            Plane.move1();
-            int i = 0;
-            while (i < EnemyPlane.size())
+            if (paused == false)
             {
-                if (EnemyPlane[i].move1(gRenderer) == false) EnemyPlane.erase(EnemyPlane.begin() + i);
-                else i++;
-            }
-            i = 0;
-            while (i < EnemyPlane2.size())
-            {
-                if (EnemyPlane2[i].move1(gRenderer) == false) EnemyPlane2.erase(EnemyPlane2.begin() + i);
-                else i++;
-            }
-            i = 0;
-            while (i < HPBox.size())
-            {
-                if (HPBox[i].move1() == false) HPBox.erase(HPBox.begin() + i);
-                else i++;
-            }
+                stringstream ss;
+                ss << "Score: " << score;
+                Point.loadfromrenderedtext(gRenderer, gFont, ss.str().c_str(), Color);
+                ss.str("");
+                countTime = pauseTime + SDL_GetTicks() - continueTime;
+                realTime = countTime - startTime;
+                Uint32 tg = realTime / 1000;
+                Uint32 m = tg / 60;
+                Uint32 s = tg - m * 60;
+                Uint32 ms = (realTime - tg * 1000) * 60 / 1000;
+                ss << "Time: " << m << ":" << s << ":" << ms;
+                Time.loadfromrenderedtext(gRenderer, gFont, ss.str().c_str(), Color);
 
-            Plane.render(gRenderer, gFont);
+                background.y -= 1;
+                if (background.y < -Fl.getHeight()) background.y = Level_Height;
+                update(gRenderer);
+                sinh(gRenderer, 2 + realTime / 30000, 1 + realTime / 60000);
+
+                Plane.move1();
+                int i = 0;
+                while (i < EnemyPlane.size())
+                {
+                    if (EnemyPlane[i].move1(gRenderer, realTime) == false)
+                    {
+                        EnemyPlane[i].close();
+                        EnemyPlane.erase(EnemyPlane.begin() + i);
+                    }
+                    else i++;
+                }
+                i = 0;
+                while (i < EnemyPlane2.size())
+                {
+                    if (EnemyPlane2[i].move1(gRenderer, realTime) == false)
+                    {
+                        EnemyPlane2[i].close();
+                        EnemyPlane2.erase(EnemyPlane2.begin() + i);
+                    }
+                    else i++;
+                }
+                i = 0;
+                while (i < HPBox.size())
+                {
+                    if (HPBox[i].move1() == false) HPBox.erase(HPBox.begin() + i);
+                    else i++;
+                }
+            }
+            Point.render(gRenderer, 0, 0);
+            Time.render(gRenderer, 0, Point.getHeight());
+            Plane.render(gRenderer, gFont, Bullet);
             for (int i = 0; i < EnemyPlane.size(); i++)
-                EnemyPlane[i].render(gRenderer, gFont);
+                EnemyPlane[i].render(gRenderer, gFont, EPlane, Bullet);
             for (int i = 0; i < EnemyPlane2.size(); i++)
-                EnemyPlane2[i].render(gRenderer, gFont);
+                EnemyPlane2[i].render(gRenderer, gFont, EPlane2, Bullet);
             for (int i = 0; i < HPBox.size(); i++)
-                HPBox[i].render(gRenderer);
+                HPBox[i].render(gRenderer, hp);
+            if (paused == true)
+            {
+                PressP.render(gRenderer, (Width - PressP.getWidth()) / 2, (Height - PressP.getHeight()) / 2);
+                PressB.render(gRenderer, (Width - PressB.getWidth()) / 2, (Height - PressP.getHeight()) / 2 + PressB.getHeight());
+            }
+            if (Plane.alive1() == false)
+            {
+                vector<pair<int, int> > res;
+                stringstream ss;
+                ss << "Your score: " << score;
+                Result.loadfromrenderedtext(gRenderer, pFont, ss.str().c_str(), Color);
+
+                ifstream f1;
+                f1.open("Result.txt");
+                int tam1;
+                int tam2;
+                while (f1 >> tam1 >> tam2)
+                {
+                    res.push_back({tam1, tam2});
+                }
+                res.push_back({score, realTime});
+                sort(res.begin(), res.end(), dk);
+                if (res.size() > 10) res.resize(10);
+
+                ofstream f2;
+                f2.open("Result.txt");
+                for (int i = 0; i < res.size(); i++)
+                {
+                    f2 << res[i].first << " " << res[i].second << endl;
+                }
+            }
+        }
+        else
+        {
+            Die.render(gRenderer, (Width - Die.getWidth()) / 2, (Height - Die.getHeight()) / 2);
+            Result.render(gRenderer, (Width - Result.getWidth()) / 2, (Height - Result.getHeight()) / 2 + Die.getHeight());
+            PlayAgain.render(gRenderer, (Width / 2 - PlayAgain.getWidth()) / 2, Height - PlayAgain.getHeight());
+            PressB.render(gRenderer, (Width / 2 + PressB.getWidth() / 2), Height - PressB.getHeight());
         }
 
         if (tam1 / 10 > timing)
@@ -414,5 +673,4 @@ void xuly(SDL_Window *&gWindow, SDL_Renderer *&gRenderer, TTF_Font *&gFont)
         Uint32 tam2 = SDL_GetTicks() - tam1;
         if (tam2 < FPS) SDL_Delay(FPS - tam2);
     }
-
 }

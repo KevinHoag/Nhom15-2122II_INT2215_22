@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <algorithm>
+
 
 #include "init.h"
 #include "close.h"
@@ -18,27 +20,39 @@ using namespace std;
 SDL_Window *gWindow = NULL;
 SDL_Renderer *gRenderer = NULL;
 TTF_Font *gFont = NULL;
+TTF_Font *pFont = NULL;
+Mix_Music *gMusic = NULL;
 
 LTexture Bg;
-LTexture *gTextTexture = new LTexture[5];
-LTexture *gTextTexture_2 = new LTexture[15];
-int check_background = 1, n = 0;
+vector<pair<int, int> > res;
+int check_background = 1, check_mixer = 1, n = 0;
 string *s = new string[15];
 
 int main(int argc, char *args[])
 {
-    cout << "ditmemay";
-    //init(gWindow, gRenderer, Width, Height);
 
-    /*freopen("Result.txt", "r", stdin);
-    cin >> n;
-    getline(cin, s[0]);
-    for (int i = 1; i <= 10; ++ i)
-        getline(cin, s[i]);*/
-    //xuly(gWindow, gRenderer, gFont);
-    //Menu(check_background, gRenderer, gTextTexture, gTextTexture_2, s, Bg, gWindow, gFont);
+    init(gWindow, gRenderer, Width, Height);
 
-
-    close(gWindow, gRenderer, gFont);
+//    freopen("Result.txt", "r", stdin);
+//    cin >> n;
+//    getline(cin, s[0]);
+//    for (int i = 0; i < n; ++ i)
+//        getline(cin, s[i]);
+//    for (int i = 1; i <= n; ++ i) {
+//            int score = 0, time = 0;
+//            cin >> score >> time;
+//            res.push_back({score, time});
+//    }
+//    freopen("Result.txt", "w", stdout);
+    Menu(check_mixer, check_background, gRenderer, s, Bg, gWindow, gFont, pFont, gMusic, res);
+//    sort(res.begin(), res.end());
+//    cout << n << '\n';
+//    for (int i = 0; i < 10; ++ i) {
+//        stringstream ss;
+//        ss << "PLAYER " << i + 1 << " : SCORE : " << res[res.size() - i - 1].first << " : TIME : " <<  res[res.size() - i - 1].second;
+//        cout << ss.str() << '\n';
+//    }
+//    for (int i = res.size() - 1; i > res.size() - 10; -- i) cout << res[i].first << ' ' << res[i].second << '\n';
+    close(gWindow, gRenderer, gFont, gMusic);
     return 0;
 }

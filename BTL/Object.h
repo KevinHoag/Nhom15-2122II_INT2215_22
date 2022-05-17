@@ -11,10 +11,9 @@ protected:
     int w;
     int h;
     static const int vt = 8;
-    LTexture img;
 public:
     Object(int x_ = 0, int y_ = 0);
-    void render(SDL_Renderer *&gRenderer);
+    void render(SDL_Renderer *&gRenderer, LTexture &img);
 };
 
 #endif

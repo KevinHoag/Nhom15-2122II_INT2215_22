@@ -1,5 +1,5 @@
 #ifndef HP_h
-#define HP_H
+#define HP_h
 
 #include "Object.h"
 

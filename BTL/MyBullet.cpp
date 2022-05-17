@@ -2,27 +2,19 @@
 
 MyBullet::MyBullet(SDL_Renderer *&gRenderer, int x_, int y_)
 {
-    img.loadfromfile(gRenderer, "Bullet3.png");
+//    img.loadfromfile(gRenderer, "Bullet3.png");
     x = x_;
     y = y_;
-    w = img.getWidth();
-    h = img.getHeight();
+    w = Bullet_w;
+    h = Bullet_h;
     a = {x, y, w, h};
 }
 
-void MyBullet::move1()
+bool MyBullet::move1()
 {
+    if (y < 0) return false;
     y -= vt / 2;
     shift();
-}
-
-bool MyBullet::render(SDL_Renderer *&gRenderer)
-{
-    if (y < 0)
-    {
-        return false;
-    }
-    Object::render(gRenderer);
     return true;
 }
 

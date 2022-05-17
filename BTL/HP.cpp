@@ -2,11 +2,11 @@
 
 HP::HP(SDL_Renderer *&gRenderer, int x_, int y_)
 {
-    img.loadfromfile(gRenderer, "HP3.png");
+  //  img.loadfromfile(gRenderer, "HP3.png");
     x = x_;
     y = y_;
-    w = img.getWidth();
-    h = img.getHeight();
+    w = hp_w;
+    h = hp_h;
 }
 
 bool HP::move1()

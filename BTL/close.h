@@ -6,6 +6,6 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
-void close(SDL_Window *&gWindow, SDL_Renderer *&gRenderer, TTF_Font *&gFont);
+void close(SDL_Window *&gWindow, SDL_Renderer *&gRenderer, TTF_Font *&gFont, Mix_Music *&gMusic);
 
 #endif

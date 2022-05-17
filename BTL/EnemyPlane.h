@@ -15,15 +15,17 @@ class Enemy: public Object
     LTexture status;
 public:
     int hp;
-    Enemy(SDL_Renderer *&gRenderer, int x_ = 0, int y_ = 0);
-    bool move1(SDL_Renderer *&gRenderer);
-    void render(SDL_Renderer *&gRenderer, TTF_Font *&gFont);
+    Enemy(SDL_Renderer *&gRenderer, int x_ , int y_, int diff);
+    bool move1(SDL_Renderer *&gRenderer, int diff);
+    void render(SDL_Renderer *&gRenderer, TTF_Font *&gFont, LTexture &EPlane, LTexture &Bullet);
     vector <SDL_Rect> getRect();
     void shift();
     bool alive1();
+    void close();
     friend class Enemy2;
-    friend void sinh(SDL_Renderer *&gRenderer);
+    friend void sinh(SDL_Renderer *&gRenderer, int sl1, int sl2);
     friend void update(SDL_Renderer *&gRenderer);
+    friend void reset();
 };
 
 #endif

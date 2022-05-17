@@ -20,5 +20,5 @@ void init(SDL_Window *&gWindow, SDL_Renderer *&gRenderer, int Width, int Height)
         cout << "Creating Window failed: " << SDL_GetError() << endl;
         return;
     }
-    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 }
+
