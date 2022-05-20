@@ -1,23 +1,11 @@
-using namespace std;
+#ifndef init_h
+#define init_h
 
-const int Height = 520;
-const int Width = 1024;
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
-SDL_Window *gWindow = NULL;
-SDL_Renderer *gRenderer = NULL;
+void init(SDL_Window *&gWindow, SDL_Renderer *&gRenderer, int Width, int Height);
 
-void init()
-{
-    gWindow = SDL_CreateWindow("CS Plane", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Width, Height, SDL_WINDOW_SHOWN);
-    if (!gWindow)
-    {
-        cout << "Creating Window failed: " << SDL_GetError() << endl;
-        return;
-    }
-    gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
-    if (!gRenderer)
-    {
-        cout << "Creating Window failed: " << SDL_GetError() << endl;
-        return;
-    }
-}
+#endif

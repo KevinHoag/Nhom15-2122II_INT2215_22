@@ -1,4 +1,13 @@
-#include "init.h"
+#ifndef LTexture_h
+#define LTexture_h
+
+#include <string>
+#include <SDL.h>
+#include <SDL_ttf.h>
+#include "Constant.h"
+
+
+using namespace std;
 
 class LTexture
 {
@@ -7,62 +16,13 @@ class LTexture
     SDL_Texture *mTexture;
 public:
     LTexture();
-    void loadfromfile(string path);
-    void render(int x, int y, SDL_Rect *p = NULL);
+    void loadfromfile(SDL_Renderer *&gRenderer, string path);
+    void loadfromrenderedtext(SDL_Renderer *&gRenderer, TTF_Font *&gFont, string text, SDL_Color Color);
+    void render(SDL_Renderer *&gRenderer, int x, int y, SDL_Rect *p = NULL);
     int getWidth();
     int getHeight();
     void close();
 };
 
-LTexture::LTexture()
-{
-    w = 0;
-    h = 0;
-    mTexture = NULL;
-}
-
-void LTexture::loadfromfile(string path)
-{
-    SDL_Surface *gSurface = IMG_Load(path.c_str());
-    SDL_SetColorKey(gSurface, SDL_TRUE, (gSurface->format, 0, 0, 0));
-    if (!gSurface)
-    {
-        cout << "IMG_Load failed: " << SDL_GetError() << endl;
-        return;
-    }
-    mTexture = SDL_CreateTextureFromSurface(gRenderer, gSurface);
-    if (!mTexture) cout << "CreateTextureFromSurface failed: " << SDL_GetError() << endl;
-    w = gSurface->w;
-    h = gSurface->h;
-    SDL_FreeSurface(gSurface);
-    gSurface = NULL;
-}
-
-void LTexture::render(int x, int y, SDL_Rect *p)
-{
-    SDL_Rect tam = {x, y, w, h};
-    if (p != NULL)
-    {
-        tam.w = p->w;
-        tam.h = p->h;
-    }
-    SDL_RenderCopy(gRenderer, mTexture, p, &tam);
-}
-
-int LTexture::getHeight()
-{
-    return h;
-}
-
-int LTexture::getWidth()
-{
-    return w;
-}
-
-void LTexture::close()
-{
-    w = 0;
-    h = 0;
-    mTexture = NULL;
-}
+#endif
 

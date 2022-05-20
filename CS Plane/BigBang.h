@@ -1,4 +1,7 @@
-SDL_Rect Explo[16];
+#ifndef BigBang_h
+#define BigBang_h
+
+#include "LTexture.h"
 
 class BigBang
 {
@@ -7,26 +10,11 @@ class BigBang
     int w;
     int h;
     int frame;
+    SDL_Rect Explo[16];
     LTexture clip;
 public:
-    BigBang(int x_, int y_);
-    bool render();
+    BigBang(SDL_Renderer *&gRenderer, int x_, int y_);
+    bool render(SDL_Renderer *&gRenderer, LTexture &BB);
 };
 
-BigBang::BigBang(int x_, int y_)
-{
-    x = x_;
-    y = y_;
-    frame = 0;
-    clip.loadfromfile("Explosion3.png");
-    w = clip.getWidth() / 4;
-    h = clip.getHeight() / 4;
-}
-
-bool BigBang::render()
-{
-    if (frame > 15) return false;
-    clip.render(x - w / 4, y - h / 4, &Explo[frame]);
-    frame++;
-    return true;
-}
+#endif
