@@ -2,7 +2,7 @@
 #include <iostream>
 #include "EnemyPlane2.h"
 
-Enemy2::Enemy2(SDL_Renderer *&gRenderer, int x_, int y_, int diff)
+Enemy2::Enemy2(int x_, int y_, int diff)
 {
     hp = 50;
     alive = true;
@@ -48,9 +48,9 @@ bool Enemy2::move1(SDL_Renderer *&gRenderer, int diff)
         if (tam < 50) tam = 50;
         if (dem >= tam)
         {
-            EnemyBullet tam1(gRenderer, x + (w - Bullet_w) / 4, y + h - Bullet_h / 2, diff);
+            EnemyBullet tam1(x + (w - Bullet_w) / 4, y + h - Bullet_h / 2, diff);
             bullet.push_back(tam1);
-            EnemyBullet tam2(gRenderer, x + (w - Bullet_w) * 3 / 4, y + h - Bullet_h / 2, diff);
+            EnemyBullet tam2(x + (w - Bullet_w) * 3 / 4, y + h - Bullet_h / 2, diff);
             bullet.push_back(tam2);
             dem = 0;
         }

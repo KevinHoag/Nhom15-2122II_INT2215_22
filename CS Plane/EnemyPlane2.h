@@ -16,7 +16,7 @@ class Enemy2: public Object
     LTexture status;
 public:
     int hp;
-    Enemy2(SDL_Renderer *&gRenderer, int x_ , int y_, int diff);
+    Enemy2(int x_ , int y_, int diff);
     bool move1(SDL_Renderer *&gRenderer, int diff);
     void render(SDL_Renderer *&gRenderer, TTF_Font *&gFont, LTexture EPlane2 ,LTexture &Bullet);
     vector <SDL_Rect> getRect();
@@ -24,8 +24,8 @@ public:
     bool alive1();
     void close();
     friend class Enemy;
-    friend void sinh(SDL_Renderer *&gRenderer, int sl1, int sl2);
-    friend void update(SDL_Renderer *&gRenderer);
+    friend void sinh(int sl1, int sl2, int sl3);
+    friend void update();
     friend void reset();
 };
 

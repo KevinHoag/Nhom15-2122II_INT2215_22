@@ -19,6 +19,7 @@
 #include "EnemyBullet.h"
 #include "EnemyPlane.h"
 #include "EnemyPlane2.h"
+#include "Rocket.h"
 #include "HP.h"
 #include "BigBang.h"
 #include "Compare.h"

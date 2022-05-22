@@ -1,6 +1,6 @@
 #include "HP.h"
 
-HP::HP(SDL_Renderer *&gRenderer, int x_, int y_)
+HP::HP(int x_, int y_)
 {
     x = x_;
     y = y_;

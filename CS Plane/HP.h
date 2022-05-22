@@ -6,9 +6,9 @@
 class HP: public Object
 {
 public:
-    HP(SDL_Renderer *&gRenderer, int x_, int y_);
+    HP(int x_, int y_);
     bool move1();
-    friend void update(SDL_Renderer *&gRenderer);
+    friend void update();
 };
 
 #endif

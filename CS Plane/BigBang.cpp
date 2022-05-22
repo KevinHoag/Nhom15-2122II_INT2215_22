@@ -1,11 +1,10 @@
 #include "BigBang.h"
 
-BigBang::BigBang(SDL_Renderer *&gRenderer, int x_, int y_)
+BigBang::BigBang(int x_, int y_)
 {
     x = x_;
     y = y_;
     frame = 0;
-  //  clip.loadfromfile(gRenderer, "Explosion3.png");
     w = Explosion_w / 4;
     h = Explosion_h / 4;
     int wi = 128;

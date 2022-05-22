@@ -13,7 +13,7 @@ class BigBang
     SDL_Rect Explo[16];
     LTexture clip;
 public:
-    BigBang(SDL_Renderer *&gRenderer, int x_, int y_);
+    BigBang(int x_, int y_);
     bool render(SDL_Renderer *&gRenderer, LTexture &BB);
 };
 

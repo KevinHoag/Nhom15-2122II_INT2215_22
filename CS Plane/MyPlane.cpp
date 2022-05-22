@@ -14,7 +14,7 @@ void MyPlane::loadfromfile(SDL_Renderer *&gRenderer, string path)
 
     pos[0].x = 0;
     pos[0].y = 0;
-    pos[0].w = w * 4 / 15;
+    pos[0].w = w * 11 / 40;
     pos[0].h = h * 17 / 77;
 
     pos[1].x = 0;
@@ -34,7 +34,7 @@ void MyPlane::loadfromfile(SDL_Renderer *&gRenderer, string path)
 
     pos[4].x = 0;
     pos[4].y = 0;
-    pos[4].w = w * 4 / 15;
+    pos[4].w = w * 11 / 40;
     pos[4].h = h * 17 / 77;
 
     pos[5].x = 0;
@@ -64,7 +64,7 @@ void MyPlane::handle(SDL_Renderer *&gRenderer, SDL_Event &e)
             vx += vt;
             break;
         case SDLK_SPACE:
-            MyBullet tam(gRenderer, x + (w - Bullet_w) / 2, y);
+            MyBullet tam(x + (w - Bullet_w) / 2, y);
             bullet.push_back(tam);
             break;
         }

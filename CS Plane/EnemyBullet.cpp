@@ -1,7 +1,7 @@
 #include "EnemyBullet.h"
 #include <iostream>
 
-EnemyBullet::EnemyBullet(SDL_Renderer *&gRenderer, int x_, int y_, int diff)
+EnemyBullet::EnemyBullet(int x_, int y_, int diff)
 {
     td = vt / 3 + diff / 30000;
     x = x_;

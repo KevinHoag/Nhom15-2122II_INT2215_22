@@ -253,12 +253,13 @@ void Tutorial(int &check_mixer, SDL_Renderer *&gRenderer, LTexture Bg, TTF_Font 
         if (quit == 0)
         {
             if (check) loadMedia_4(keyrow, fsize, gRenderer, gTextTexture_3);
-            for (int i = 0; i < 9; ++ i)
+            gTextTexture_3[0].render(gRenderer, h, w); w += 70;
+            for (int i = 1; i < 9; ++ i)
             {
-                gTextTexture_3[i].render(gRenderer, h, w );
+                gTextTexture_3[i].render(gRenderer, h + 100, w );
                 w += sum;
             }
-            gTextTexture_3[9].render(gRenderer, h + 550, w + 70 );
+            gTextTexture_3[9].render(gRenderer, h + 550, w + 50 );
             gTextTexture_3[10].render(gRenderer, h, w + 30 );
         }
         else
@@ -395,14 +396,14 @@ void S_background(int &check_background, SDL_Renderer *&gRenderer, LTexture Bg, 
             if (keyrow == 2)
             {
                 check_background = 2;
-                Bg.loadfromfile(gRenderer, "HaNoi2.png");
+                Bg.loadfromfile(gRenderer, "ocean.png");
                 SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
                 SDL_RenderClear(gRenderer);
             }
             if (keyrow == 3)
             {
                 check_background = 3;
-                Bg.loadfromfile(gRenderer, "Jungle.png");
+                Bg.loadfromfile(gRenderer, "galaxy.png");
                 SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
                 SDL_RenderClear(gRenderer);
             }

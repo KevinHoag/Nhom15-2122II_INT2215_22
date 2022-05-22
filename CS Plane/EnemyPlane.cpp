@@ -1,7 +1,7 @@
 #include <sstream>
 #include "EnemyPlane.h"
 
-Enemy::Enemy(SDL_Renderer *&gRenderer, int x_, int y_, int diff)
+Enemy::Enemy(int x_, int y_, int diff)
 {
     hp = 30;
     alive = true;
@@ -18,7 +18,7 @@ Enemy::Enemy(SDL_Renderer *&gRenderer, int x_, int y_, int diff)
 
     pos[0].x = 0;
     pos[0].y = 0;
-    pos[0].w = w * 4 / 15;
+    pos[0].w = w * 11 / 40;
     pos[0].h = h * 17 / 77;
 
     pos[1].x = 0;
@@ -38,7 +38,7 @@ Enemy::Enemy(SDL_Renderer *&gRenderer, int x_, int y_, int diff)
 
     pos[4].x = 0;
     pos[4].y = 0;
-    pos[4].w = w * 4 / 15;
+    pos[4].w = w * 11 / 40;
     pos[4].h = h * 17 / 77;
 
     pos[5].x = 0;
@@ -57,7 +57,7 @@ bool Enemy::move1(SDL_Renderer *&gRenderer, int diff)
     {
         if (y % 200 == 0)
         {
-            EnemyBullet tam(gRenderer, x + (w - Bullet_w) / 2, y + h - Bullet_h / 2, diff);
+            EnemyBullet tam(x + (w - Bullet_w) / 2, y + h - Bullet_h / 2, diff);
             bullet.push_back(tam);
         }
     }

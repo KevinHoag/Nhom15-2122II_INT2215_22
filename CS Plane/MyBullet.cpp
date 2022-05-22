@@ -1,6 +1,6 @@
 #include "MyBullet.h"
 
-MyBullet::MyBullet(SDL_Renderer *&gRenderer, int x_, int y_)
+MyBullet::MyBullet(int x_, int y_)
 {
     x = x_;
     y = y_;

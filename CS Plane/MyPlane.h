@@ -29,7 +29,8 @@ public:
     bool alive1();
     void close();
     friend class HP;
-    friend void update(SDL_Renderer *&gRenderer);
+    friend void sinh();
+    friend void update();
     friend void reset();
 };
 

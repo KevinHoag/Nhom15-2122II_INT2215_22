@@ -74,6 +74,8 @@
 		<Unit filename="Object.h" />
 		<Unit filename="Play.cpp" />
 		<Unit filename="Play.h" />
+		<Unit filename="Rocket.cpp" />
+		<Unit filename="Rocket.h" />
 		<Unit filename="close.cpp" />
 		<Unit filename="close.h" />
 		<Unit filename="init.cpp" />
