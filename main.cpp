@@ -1,31 +1,37 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
-#include <stdio.h>
 #include <string>
-#include <cmath>
-#include "_ttf.h"
-#include "Title.h"
-#include "menu.h"
-#include "solution.h"
-#include "leaderboard.h"
-#include "tutorial.h"
-#include "setting.h"
-#include "s_resolution.h"
-#include "s_background.h"
-#include "s_music.h"
-#include "accept.h"
-int main( int argc, char* args[] )
+#include <vector>
+#include <cstdlib>
+#include <algorithm>
+
+
+#include "init.h"
+#include "close.h"
+#include "LTexture.h"
+#include "Menu.h"
+#include "Constant.h"
+#include "Play.h"
+using namespace std;
+
+SDL_Window *gWindow = NULL;
+SDL_Renderer *gRenderer = NULL;
+TTF_Font *gFont = NULL;
+TTF_Font *pFont = NULL;
+Mix_Music *gMusic = NULL;
+
+LTexture Bg;
+vector<pair<int, int> > res;
+int check_background = 1, check_mixer = 1, n = 0;
+string *s = new string[15];
+
+int main(int argc, char *args[])
 {
-    freopen("Result.txt", "r", stdin);
-    std::cin >> n;
-    std::getline(std :: cin, s[0]);
-    for (int i = 1; i <= n; ++ i)
-        std::getline(std :: cin, s[i]);
-    Solution();
-    //freopen("Result.txt", "w", stdout);
-	close();
-	return 0;
+    init(gWindow, gRenderer, Width, Height);
+    Menu(check_mixer, check_background, gRenderer, s, Bg, gWindow, gFont, pFont, gMusic, res);
+    close(gWindow, gRenderer, gFont, pFont, gMusic);
+    return 0;
 }
